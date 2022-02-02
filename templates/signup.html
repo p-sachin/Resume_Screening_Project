@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Sign Up
+{% endblock %}
+
+{% block content %}
+<header class="header-content">
+  <nav class="navbar navbar-expand-lg navbar-light">
+     <div class="container">
+       <!-- <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="25" height="24" class="nav-logo"> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-expanded="false" aria-controls="navbarCollapse" aria-label="Toggle Navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+           <ul class="navbar-nav main">
+              <li class="nav-item">
+                 <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ url_for('signup') }}" class="nav-link active">Register</a>
+              </li>
+           </ul>
+        </div>
+     </div>
+  </nav>
+</header>
+
+<section id="home-content" style="background: url(../static/img/banner-main.jpg); background-size: cover; background-position: 25% 75%;" data-scroll-index="0">
+  <div class="container login-content">
+  <div class="login">
+    <h1>Register</h1>
+    {% for message in get_flashed_messages() %}
+    <div class=flash-signup>{{ message }}</div>
+ {% endfor %}
+      <form method="post" class="form-signin" action="/signup" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="username">
+        {{ wtf.form_field(form.username) }}
+        </div>
+        <div class="email">
+          {{ wtf.form_field(form.email) }}
+        </div>
+        <div class="password">
+        {{ wtf.form_field(form.password) }}
+        </div>
+        <div class="button">
+          <button type="submit" class="btn btn-primary btn-block btn-large">Register</button>
+          </div>
+      </form>
+  </div>
+  </div>
+  </section>
+{% endblock %}
