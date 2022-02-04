@@ -13,6 +13,10 @@ Login
    body {
      height: 100%;
    }
+
+   nav .navbar-brand.logo {
+    color: #222;
+  }
    
    body {
      display: flex;
@@ -53,6 +57,7 @@ Login
      border-top-right-radius: 0;
    }
 
+
    nav.navbar .nav-item {
       padding: 0 13px 0 13px;
       font-family: "Raleway", sans-serif;
@@ -72,6 +77,7 @@ Login
 <header class="header-content">
   <nav class="navbar navbar-expand-lg navbar-light">
      <div class="container">
+      <a class="navbar-brand logo" href="#">CV Screener</a>
        <!-- <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="25" height="24" class="nav-logo"> -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-expanded="false" aria-controls="navbarCollapse" aria-label="Toggle Navigation">
         <span class="navbar-toggler-icon"></span>
@@ -96,7 +102,7 @@ Login
 <div class="container login-content">
       <form method="post" action="/login" class="form-signin">
          <div class="upper-content text-center">
-        <img class="mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <img class="mb-4" src="{{ url_for('static', filename='img/user.png') }}" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
         </div>
         {% for message in get_flashed_messages() %}
@@ -110,7 +116,7 @@ Login
          {{ wtf.form_field(form.password) }}
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary mt-10" type="submit">Sign in</button>
+        <button class="w-100 btn btn-lg btn-primary mt-10 sign-btn" type="submit">Sign in</button>
       </form>
       <p class="text-center pt-10">Don't have an account? Please <a href="{{ url_for('signup') }}">register</a> here.</p>
 </div>

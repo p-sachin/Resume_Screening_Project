@@ -2,7 +2,9 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask import flash
 import unicodedata
+import pandas as pd
 import string
+import os
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
@@ -130,8 +132,22 @@ def dashboards():
         except:
             data = ResumeParser(f.filename).get_extracted_data()
 
+        cleaned_data = {x.replace('_', ' '): v
+                        for x, v in data.items()}
+
+        def clean_content(text):
+            text = text.replace("uf0b7", "").replace(
+                "'", "").replace("[", "").replace("]", "")
+            return text
+
+        df = pd.DataFrame()
+        df["key"] = cleaned_data.keys()
+        df["content"] = cleaned_data.values()
+        df["content"] = df.content.apply(lambda x: clean_content(str(x)))
+        final_data = df.set_index('key')['content'].to_dict()
+
         datas = []
-        datas.append(data)
+        datas.append(final_data)
 
         flash("File uploaded successfully")
       #  return redirect(url_for('dashboard'))
@@ -178,7 +194,7 @@ def dashboards():
         prediction = rf_clf.predict([cleaned])
         result = prediction[0]
 
-    return render_template('dashboard.html', res_content=datas, pred=result)
+    return render_template('dashboard.html', name=current_user.username, res_content=datas, pred=result)
 
 
 @app.route('/logout')
@@ -189,4 +205,5 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0')
+    app.run('0.0.0.0', port=(os.environ.get("PORT", 5000)))
+    # app.run(debug=True)
