@@ -1,195 +1,166 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
 Dashboard
 {% endblock %}
 
-{% block styles %}
-{{super()}}
-<link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
-{% endblock %}
-
 {% block content %}
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-        </div>
-      </div>
-    </nav>
 
-    <div class="container">
-      <div class="row dashboard-content">
-        <div class="col-lg-3">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-          </ul>
-        </div>
-        <div class="col-lg-9">
-          <h1 class="page-header">Welcome, {{ name }}</h1>
+<style>
 
+    .styled-table {
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 0.9em;
+      font-family: sans-serif;
+      min-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
 
-          <h2 class="sub-header">Section title</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
-                </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  .styled-table thead tr {
+   background-color: #777777;
+   color: #ffffff;
+   text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+   border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+   background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+   border-bottom: 2px solid #777777;
+}
+
+.styled-table tbody tr.active-row {
+   font-weight: bold;
+   color: #009879;
+}
+
+hr {
+   position: relative;
+   top: 69px;
+}
+
+.mt-160 {
+   margin-top: 160px;
+}
+
+.flash-upload {
+   padding-left: 400px;
+}
+
+</style>
+    
+<header class="header-content">
+  <nav class="navbar navbar-expand-lg navbar-light">
+     <div class="container">
+       <!-- <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="25" height="24" class="nav-logo"> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-expanded="false" aria-controls="navbarCollapse" aria-label="Toggle Navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+           <ul class="navbar-nav main">
+              <li class="nav-item">
+                 <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ url_for('dashboard') }}" class="nav-link active">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                 <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+              </li>
+           </ul>
         </div>
-      </div>
+     </div>
+  </nav>
+</header>
+
+<section class="py-5 text-center container-fluid blog-banner" id="about">
+   <div class="row py-lg-5">
+     <div class="col-lg-6 col-md-8 mx-auto">
+       <h1 class="fw-light">Welcome <span id="user">{{name}}</span></h1>
+       <p class="lead text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, omnis?</p>
+       <p>
+       </p>
+     </div>
+   </div>
+ </section>
+
+<!-- Contact Section Starts -->
+<section id="contact" class="p_80" data-scroll-index="3">
+	<div class="container">
+		<div class="contact-title text-center">
+			<h2>Upload</h2>
+			<p>Please upload the resume</p>
+		</div>
+
+    <div class="row">
+         <div class="col-lg-12">
+            <form action = "http://localhost:5000/uploader" method = "POST" 
+            enctype = "multipart/form-data" id="contactForm" class="row form-contact">
+            <div class="row">
+               {% for message in get_flashed_messages() %}
+               <div class=flash-upload>{{ message }}</div>
+            {% endfor %}
+               <div class="col-lg-12 d-flex justify-content-center">
+            <div class="form-group">
+               <input type="file" class="form-control" name="file" />
+            </div>
+            </div>
+            <div class="col-lg-12 d-flex justify-content-center">
+            <button type="submit" name="submit" class="submit-btn btn btn-outline-secondary contact-btn">Submit</button>
+            </div>
+            </div>
+         </form> 
+         </div>
     </div>
+
+
+    {% for dict_item in res_content %}
+    <hr>
+<div class="contact-title text-center mt-160">
+  <h2>Summary</h2>
+  <p>Check your results</p>
+</div>
+<div class="pred-result">
+  <p class="text">Predicted Position: {{pred}}</p>
+</div>
+
+    <table class="styled-table">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Points</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for key, value in dict_item.items() %}
+          <tr>
+            <td>{{key}}</td>
+            <td>{{value}}</td>
+        </tr>
+  {% endfor %}
+{% endfor %}
+          <!-- and so on... -->
+      </tbody>
+  </table>
+
+		</div>
+</section>
+<!-- Contact Section Ends -->
+
+<!-- Contact Section Starts -->
+
+<!-- Contact Section Ends -->
+
+
 {% endblock %}

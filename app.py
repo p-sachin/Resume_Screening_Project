@@ -1,11 +1,20 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask import flash
+import unicodedata
+import string
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from pyresparser import ResumeParser
+from docx import Document
+import re
+import joblib
+from werkzeug.utils import secure_filename
+import spacy
+
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
@@ -16,6 +25,11 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# Load the spacy library for text cleaning
+nlp = spacy.load('en_core_web_sm')
+# Loading the saved model
+rf_clf = joblib.load('rf_clf.pkl')
 
 
 class User(UserMixin, db.Model):
@@ -36,19 +50,19 @@ def load_user(user_id):
 
 
 class LoginForm(FlaskForm):
-    username = StringField('username:', validators=[
+    username = StringField('Username:', validators=[
                            InputRequired()])
-    password = PasswordField('password:', validators=[
+    password = PasswordField('Password:', validators=[
                              InputRequired()])
     remember = BooleanField('Remember me')
 
 
 class RegisterForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired(), Email(
+    email = StringField('Email', validators=[InputRequired(), Email(
         message='Invalid email'), Length(max=50)])
-    username = StringField('username:', validators=[
+    username = StringField('Username:', validators=[
                            InputRequired(), Length(min=4, max=15)])
-    password = PasswordField('password:', validators=[
+    password = PasswordField('Password:', validators=[
                              InputRequired(), Length(min=5, max=80)])
 
 
@@ -88,8 +102,8 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         # return '<h1>New user has been created!</h1>'
-        flash("User has been created")
-        return redirect(url_for('login'))
+        flash("User created")
+        return redirect(url_for('signup'))
         # return '<h1>' + form.username.data + ' ' + form.email.data + ' ' + form.password.data + '</h1>'
 
     return render_template('signup.html', form=form)
@@ -101,6 +115,72 @@ def dashboard():
     return render_template('dashboard.html', name=current_user.username)
 
 
+@app.route('/uploader', methods=['GET', 'POST'])
+def dashboards():
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(secure_filename(f.filename))
+        try:
+            doc = Document()
+            with open(f.filename, 'r') as file:
+                doc.add_paragraph(file.read())
+                doc.save("text.docx")
+                data = ResumeParser('text.docx').get_extracted_data()
+
+        except:
+            data = ResumeParser(f.filename).get_extracted_data()
+
+        datas = []
+        datas.append(data)
+
+        flash("File uploaded successfully")
+      #  return redirect(url_for('dashboard'))
+
+      # Turn a Unicode string to plain ASCII, thanks to https://stackoverflow.com/a/518232/2809427
+        def unicode_to_ascii(s):
+            all_letters = string.ascii_letters + " .,;'-"
+            return ''.join(
+                c for c in unicodedata.normalize('NFD', s)
+                if unicodedata.category(c) != 'Mn'
+                and c in all_letters
+            )
+
+        # Remove Stop Words
+        def remove_stopwords(text):
+            doc = nlp(text)
+            return " ".join([token.text for token in doc if not token.is_stop])
+
+        def clean_text(text):
+            #print(f'Text before Cleaning: {text}')
+            # Text to lowercase
+            text = text.lower()
+            # Remove URL from text
+            text = re.sub(r"http\S+", "", text)
+            # Remove Numbers from text
+            text = re.sub(r'\d+', '', text)
+            # Convert the unicode string to plain ASCII
+            text = unicode_to_ascii(text)
+            # Remove Punctuations
+            text = re.sub(r'[^\w\s]', '', text)
+            #text = remove_punct(text)
+            # Remove StopWords
+            text = remove_stopwords(text)
+            # Remove empty spaces
+            text = text.strip()
+            # \s+ to match all whitespaces
+            # replace them using single space " "
+            text = re.sub(r"\s+", " ", text)
+            #print(f'Text after Cleaning: {text}')
+            return text
+
+        data = str(data)
+        cleaned = clean_text(data)
+        prediction = rf_clf.predict([cleaned])
+        result = prediction[0]
+
+    return render_template('dashboard.html', res_content=datas, pred=result)
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -109,4 +189,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run('0.0.0.0')

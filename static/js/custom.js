@@ -74,26 +74,6 @@ scroll();
 
 skillbar();
 
-// Contact form
-
-function ContactForm() {
-var form = $('#contactForm');
-form.submit(function(event){
-    event.preventDefault();
-    var form_status = $('<div class="form_status"></div>');
-    $.ajax({
-        url: $(this).attr('action'),
-        beforeSend: function(){
-            form.prepend( form_status.html('<p><i class="fa fa-spinner fa-spin"></i>Please wait...</p>').fadeIn() );
-        }
-    }).done(function(data){
-        form_status.html('<p class="text-success">Thank you for your message.</p>').delay(3000).fadeOut();
-    });
-});
-}
-
-ContactForm();
-
 });
 
 
